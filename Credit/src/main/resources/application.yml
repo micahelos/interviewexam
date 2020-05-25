@@ -1,0 +1,19 @@
+server:
+  port: 0
+
+product:
+  urls:
+    GetProducts: http://product-service/GetProducts/
+    CreateProduct : http://product-service/CreateProduct/
+    serviceID: product-service
+customer:
+  urls:
+    GetCustomers: http://customer-service/GetCustomers/
+    CreateCustomer : http://customer-service/CreateCustomer/    
+    serviceID: customer-service
+spring:  application:    name: Credit-Service  jpa:    hibernate:      ddl-auto: update    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    show-sql: true
+      datasource:    url: jdbc:mysql://localhost:3306/creditdb?serverTimezone=UTC&createDatabaseIfNotExist=true
+    username: springuser
+    password: thePassword     driver-class-name: com.mysql.jdbc.Driver  jackson:    serialization:      indent-output: true
+eureka:  client:    service-url:      default-zone: http://localhost:8761/eureka/
