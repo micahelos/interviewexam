@@ -141,16 +141,37 @@ Przykładowe parametry JSON:
 ## Uruchomienie i budowanie z pomocą Apache Maven
 Musisz zbudować i uruchomić każdą aplikację osobno. We wszystkich przypadkach możesz zbudować aplikację za pomocą Maven w następujący sposób: 
 `% ./mwnw clean package`
-Po zbudowaniu projektów możesz uruchamiać ich pliki wykonywalne JAR indywidualnie. Na przykład możesz to zrobić w ten sposób:=
+Po zbudowaniu projektów możesz uruchamiać ich pliki wykonywalne JAR indywidualnie. Na przykład możesz to zrobić w ten sposób:
  1. Rejestr Usług - Netflix Eureka Discover Server:  `java -jar target/eureka-discover-server.jar`
 2.	Product-Service: `java -jar target/product-service.jar`
 3. Customer-Service: `java -jar target/customer-service.jar`
 4. Credit-Service: `java -jar target/credit-service.jar`
 
+lub po prostu:
+`mvn spring-boot:run` w każdym z projektów/modułów. 
+
 Domyślnie Serwer Eureka uruchamiany jest na porcie `8761`, więc po uruchomieniu usług można przejść w przeglądarce pod adres `localhost:8761`, aby sprawdzić czy wszystkie usługi wystartowały prawidłowo. Numer portów dla pozostałych usług jest przydzielany losowo.
 
 ## Docker
-<TODO>
+Komponenty używają **jib-maven-plugin - Containerize your Maven project** do stworzenia kontenerów. 
+
+### Stworzenie *image* dla każdego z komponetów:
+Należy wywołać komendę `maven compile jib:dockerBuild` w każdym z katalogów np:
+`cd .\Credit\ && mvn compile jib:dockerBuild && cd ..\Product\ && mvn compile jib:dockerBuild && cd ..\Customer\ && mvn compile jib:dockerBuild && cd ..\eureka-server\ && mvn compile jib:dockerBuild`
+
+ lub 
+ uruchomić Apache maven w katalogu głównym:
+ `mvn compile jib:dockerBuild`
+ I to wszystko. Pozostaje jedynie je uruchomić przez docker-compose.
+
+### Docker-Compose:
+Cały proces zawiera się w pliku docker-compose.yml.
+1. **Prerekwizyt :**
+ `docker pull mysql`
+3. **Wywołanie:**
+`docker compose up`
+4. **Zakończenie** 
+`docker compose down`
 
 ## Baza Danych
 Każda z usług w momencie uruchomienia aplikacji tworzy własny schemat bazy danych, o ile jeszcze taki nie istnieje. Jeżeli baza danych już istnieje w momencie ponownego uruchomienia aplikacji dane są jedynie uaktualniane lub dodawane nowe.
@@ -169,7 +190,8 @@ Dodatkowo zostanie HIbernate utworzy sekwencje:
 `Hibernate: create table hibernate_sequence (next_val bigint) engine=InnoDB
 Hibernate: insert into hibernate_sequence values ( 1 )`
   
-### Uwagi do zadania:
+### Uwagi do zadania lub komentarze:
 1.	Wystawienie dwóch osobnych usług REST CreateCredit oraz GetCredit wykonałem zgodnie z instrukcją w .pdf, natomiast uważam, że znacznie lepszym pomysłem byłoby stworzenie Restful api lub zmiana nazw wystawionych usług.
 Na przykładowy adres `localhost:8080/credits/`można byłoby zarówno wywołać metodę GET zwracającą wszystkie kredyty jak i za pomocą POST założyć nowy kredyt. W przypadku założenia nowego kredytu skłaniałbym się jednak ku adresowi zbliżonemu do `localhost:8080/credits/create`.
 2.	 Zwracaną wartością dla wywołania usługi CreateCredit zamiast numeru założonego kredytu można by zwracać cały model kredytu, z informacją dla kogo został założony i na jaki produkt. 
+3. Zamiast komponentu BazaDanych skorzystałem z eureka-server do zarządzania mikroserwisami, a każdy z nich zgodnie z koncepcją jest od siebie niezależny dzięki czemu zarządza on swoim schematem bazy danych oddzielnie.
