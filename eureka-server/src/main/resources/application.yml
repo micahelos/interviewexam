@@ -6,4 +6,16 @@ eureka:  instance:    hostname: localhost
     fetch-registry: false
     service-url:      default-zone: http://localhost:${server.port}/eureka/
   server:    enable-self-preservation: false
- 
+
+---
+spring:
+  profiles: docker
+  application:
+    name: docker-eureka-server
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+  server:
+    enable-self-preservation: false
+      

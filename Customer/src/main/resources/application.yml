@@ -19,4 +19,32 @@ spring:
 eureka:
   client:
     service-url:
-      default-zone: http://localhost:8761/eureka/      
+      default-zone: http://localhost:8761/eureka/
+      
+---
+spring:
+  profiles: docker
+  application:
+    name: docker-customer-service
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    show-sql: true
+  
+  datasource:
+    url: jdbc:mysql://host.docker.internal:3306/customerdb?serverTimezone=UTC&createDatabaseIfNotExist=true
+    username: root
+    password: thePassword 
+    driver-class-name: com.mysql.jdbc.Driver
+  jackson:
+    serialization:
+      indent-output: true
+
+server:
+  port: 8082
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://host.docker.internal:8761/eureka/                  

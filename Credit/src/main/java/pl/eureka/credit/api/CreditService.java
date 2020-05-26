@@ -46,6 +46,7 @@ public class CreditService {
 
 	public List<CreditInformationModel> getCredits() {
 		try {
+			System.out.println(getCustomersURL + " " +getProductsURL );
 			List<Product> productList = getProducts();
 			List<Customer> customerList = getCustomers();
 			return repo.findAll().stream().map(credit -> {
@@ -54,6 +55,8 @@ public class CreditService {
 				return new CreditInformationModel(customer, product, credit);
 			}).collect(Collectors.toList());
 		} catch (Exception e) {
+			System.out.println("ERROR!!!");
+			System.out.println(e.getMessage());
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "One of endpoints are unavailable", e);
 		}
 	}
@@ -74,6 +77,7 @@ public class CreditService {
 			
 			return response;
 		} catch(Exception e) {
+			System.out.println(e.getMessage());
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Problem couse one of endpoints. Changes are rollback.", e);
 		}
 	}

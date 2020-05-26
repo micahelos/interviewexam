@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>inteca.exam</groupId>
-	<artifactId>eureka-discover-server</artifactId>
+	<artifactId>eureka-client-discover</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>eureka-server</name>
 	<description>Eureka server discovering microservices</description>
@@ -63,7 +63,19 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>jib-maven-plugin</artifactId>
+				<version>2.3.0</version>
+				<configuration>
+					<to>
+						<image>eurekaimage</image>
+					</to>
+					<container >
+ 					<ports>8761</ports>
+					</container>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
-
 </project>

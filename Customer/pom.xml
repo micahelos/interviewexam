@@ -61,12 +61,24 @@
 		</dependency>
 	</dependencies>
 
+
 	<build>
 		<finalName>customer-service</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>jib-maven-plugin</artifactId>
+				<version>2.3.0</version>
+				<configuration>
+					<to>
+						<image>customerimage</image>
+					</to>
+					<from> <image>openjdk:8u212-jre-alpine</image></from>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

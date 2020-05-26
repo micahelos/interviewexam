@@ -13,7 +13,43 @@ customer:
     serviceID: customer-service
 spring:  application:    name: Credit-Service  jpa:    hibernate:      ddl-auto: update    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     show-sql: true
-      datasource:    url: jdbc:mysql://localhost:3306/creditdb?serverTimezone=UTC&createDatabaseIfNotExist=true
+  
+  datasource:    url: jdbc:mysql://localhost:3306/creditdb?serverTimezone=UTC&createDatabaseIfNotExist=true
     username: springuser
     password: thePassword     driver-class-name: com.mysql.jdbc.Driver  jackson:    serialization:      indent-output: true
-eureka:  client:    service-url:      default-zone: http://localhost:8761/eureka/
+eureka:  client:    service-url:      defaultZone: http://localhost:8761/eureka/
+---
+spring:  profiles: docker
+  application:    name: docker-credit-service
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    show-sql: true
+  
+  datasource:
+    url: jdbc:mysql://host.docker.internal:3306/creditdb?serverTimezone=UTC&createDatabaseIfNotExist=true
+    username: root
+    password: thePassword 
+    driver-class-name: com.mysql.jdbc.Driver
+  jackson:
+    serialization:
+      indent-output: true
+
+server:  port: 8083
+  
+product:
+  urls:
+    GetProducts: http://docker-product-service/GetProducts/
+    CreateProduct : http://docker-product-service/CreateProduct/
+    serviceID: docker-product-service
+customer:
+  urls:
+    GetCustomers: http://docker-customer-service/GetCustomers/
+    CreateCustomer : http://docker-customer-service/CreateCustomer/    
+    serviceID: docker-customer-service
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://host.docker.internal:8761/eureka/

@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.3.0.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>inteca.exam</groupId>
-	<artifactId>eureka-client-product-service</artifactId>
+	<artifactId>eureka-client-product</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Product</name>
 	<description>Product Service - Client Eureka server</description>
@@ -28,7 +29,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		
+
 
 		<dependency>
 			<groupId>mysql</groupId>
@@ -71,12 +72,24 @@
 		</dependencies>
 	</dependencyManagement>
 
+
 	<build>
-	<finalName>product-service</finalName>
+		<finalName>product-service</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>jib-maven-plugin</artifactId>
+				<version>2.3.0</version>
+				<configuration>
+					<to>
+						<image>productimage</image>
+					</to>
+					<from> <image>openjdk:8u212-jre-alpine</image></from>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
