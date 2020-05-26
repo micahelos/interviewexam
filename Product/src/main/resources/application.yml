@@ -10,7 +10,7 @@ spring:
     show-sql: true
   datasource:
     url: jdbc:mysql://localhost:3306/productdb?serverTimezone=UTC&createDatabaseIfNotExist=true
-    username: springuser
+    username: root
     password: thePassword 
     driver-class-name: com.mysql.jdbc.Driver
   jackson:
