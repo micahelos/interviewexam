@@ -11,11 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.server.ResponseStatusException;
 import pl.eureka.credit.data.CreditRepository;
+import pl.eureka.credit.exception.CreditServiceException;
 import pl.eureka.credit.model.CreditCreateModel;
 import pl.eureka.credit.model.CreditInformationModel;
 import pl.eureka.credit.model.Customer;
@@ -44,9 +43,8 @@ public class CreditService {
 	@Value("${eureka.client.service-url.default-zone}")
 	private String eurekaServerURL;
 
-	public List<CreditInformationModel> getCredits() {
+	public List<CreditInformationModel> getCredits() throws CreditServiceException {
 		try {
-			System.out.println(getCustomersURL + " " +getProductsURL );
 			List<Product> productList = getProducts();
 			List<Customer> customerList = getCustomers();
 			return repo.findAll().stream().map(credit -> {
@@ -55,14 +53,12 @@ public class CreditService {
 				return new CreditInformationModel(customer, product, credit);
 			}).collect(Collectors.toList());
 		} catch (Exception e) {
-			System.out.println("ERROR!!!");
-			System.out.println(e.getMessage());
-			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "One of endpoints are unavailable", e);
+			throw new CreditServiceException("Can't execute GetCredits service. " + e.getMessage().toString());
 		}
 	}
 
-	@Transactional(rollbackOn={RuntimeException.class,IllegalStateException.class, ConnectException.class})
-	public Map<String,Long> createCredit(CreditCreateModel newCreditModel) {
+	@Transactional(rollbackOn={RuntimeException.class,IllegalStateException.class, ConnectException.class, CreditServiceException.class})
+	public Map<String,Long> createCredit(CreditCreateModel newCreditModel) throws CreditServiceException {
 
 		try {
 			newCreditModel.setCredit(Optional.ofNullable(repo.save(newCreditModel.getCredit())).orElseThrow(RuntimeException::new)); 
@@ -77,8 +73,7 @@ public class CreditService {
 			
 			return response;
 		} catch(Exception e) {
-			System.out.println(e.getMessage());
-			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Problem couse one of endpoints. Changes are rollback.", e);
+			throw new CreditServiceException("Problem coused by one of endpoints. Changes in creditdb are rollback. ");
 		}
 	}
 

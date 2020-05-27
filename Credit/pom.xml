@@ -57,6 +57,7 @@
 				spring-cloud-starter-netflix-eureka-client
 			</artifactId>
 		</dependency>
+		
 	</dependencies>
 
 	<dependencyManagement>
